@@ -1,5 +1,5 @@
 name: Build ChunkyBorder
-on: [ push, pull_request ]
+on: [ push, pull_request, workflow_dispatch ]
 jobs:
   build:
     # Only run on PRs if the source branch is on someone else's repo

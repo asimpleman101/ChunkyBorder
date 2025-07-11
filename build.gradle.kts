@@ -73,13 +73,16 @@ subprojects {
 }
 
 fun commitsSinceLastTag(): String {
-    val tagDescription = ByteArrayOutputStream()
-    exec {
-        commandLine("git", "describe", "--tags")
-        standardOutput = tagDescription
+    return try {
+        val output = ByteArrayOutputStream()
+        exec {
+            commandLine("git", "describe", "--tags")
+            standardOutput = output
+            isIgnoreExitValue = true // Avoid failing the build
+        }
+        val desc = output.toString().trim()
+        if (desc.contains('-')) desc.split('-')[1] else "0"
+    } catch (e: Exception) {
+        "0"
     }
-    if (tagDescription.toString().indexOf('-') < 0) {
-        return "0"
-    }
-    return tagDescription.toString().split('-')[1]
 }
